@@ -23,7 +23,7 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 // Setiap fitur punya key localStorage sendiri supaya data tidak saling menimpa
 const STORAGE_KEYS = {
   transactions: "wealthguide:transactions",
-  bookmarks: "intertwined:bookmarks",
+  bookmarks: "intertwinedmind:bookmarks",
   highScore: "quickquiz:highscore",
   activeTab: "app:activeTab",
 };
@@ -153,6 +153,22 @@ function setActiveTab(name) {
   });
 
   saveData(STORAGE_KEYS.activeTab, name);
+
+  // Cerminkan tab aktif ke URL (?tab=...) supaya tiap tab punya alamat sendiri
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set("tab", name);
+    history.replaceState(null, "", url);
+  } catch (error) {
+    // Beberapa browser membatasi replaceState pada file:// - aman diabaikan
+  }
+}
+
+// Tab awal: prioritaskan ?tab= di URL, lalu tab terakhir dari localStorage
+function getInitialTab() {
+  const fromUrl = new URLSearchParams(window.location.search).get("tab");
+  if (TAB_NAMES.includes(fromUrl)) return fromUrl;
+  return loadData(STORAGE_KEYS.activeTab, TAB_NAMES[0]);
 }
 
 $$(".tab-btn").forEach((button) => {
@@ -262,30 +278,30 @@ function renderExpenses() {
   expenseList.innerHTML = visible
     .map((t) => {
       const isIncome = t.type === "Pemasukan";
-      const badgeClass = isIncome ? "bg-matcha text-ocean" : "bg-sky/40 text-ocean";
+      const badgeClass = isIncome ? "bg-lime text-forest" : "bg-olive/40 text-forest";
       const icon = isIncome ? "ti-arrow-down-left" : "ti-arrow-up-right";
       const sign = isIncome ? "+" : "−";
 
       return `
         <li class="card flex items-center gap-3 p-4">
-          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isIncome ? "bg-matcha/60" : "bg-aqua"}">
-            <i class="ti ${icon} text-lg"></i>
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isIncome ? "bg-lime/60" : "bg-pale"}">
+            <i aria-hidden="true" class="ti ${icon} text-lg"></i>
           </div>
           <div class="min-w-0 flex-1">
             <p class="truncate font-semibold">${escapeHtml(t.title)}</p>
-            <div class="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-ocean/70">
+            <div class="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-muted">
               <span class="badge ${badgeClass}">${t.type}</span>
-              <span class="badge bg-milk border border-sky/40">${escapeHtml(t.category)}</span>
+              <span class="badge bg-cream border border-olive/40">${escapeHtml(t.category)}</span>
               <span>${formatTanggal(t.date)}</span>
             </div>
           </div>
           <p class="shrink-0 font-display text-lg font-bold">${sign}${formatRupiah(t.amount)}</p>
           <div class="flex shrink-0">
             <button type="button" class="btn-icon" data-action="edit" data-id="${t.id}" aria-label="Ubah ${escapeHtml(t.title)}">
-              <i class="ti ti-pencil"></i>
+              <i aria-hidden="true" class="ti ti-pencil"></i>
             </button>
-            <button type="button" class="btn-icon hover:!text-rose-600" data-action="delete" data-id="${t.id}" aria-label="Hapus ${escapeHtml(t.title)}">
-              <i class="ti ti-trash"></i>
+            <button type="button" class="btn-icon hover:!text-rose-700" data-action="delete" data-id="${t.id}" aria-label="Hapus ${escapeHtml(t.title)}">
+              <i aria-hidden="true" class="ti ti-trash"></i>
             </button>
           </div>
         </li>`;
@@ -450,27 +466,27 @@ function renderBookmarks() {
           <div class="min-w-0">
             <!-- Buka di tab baru dengan rel aman -->
             <a href="${escapeHtml(b.url)}" target="_blank" rel="noopener noreferrer"
-               class="block truncate font-semibold underline decoration-sky decoration-2 underline-offset-4 hover:decoration-ocean">
+               class="block truncate font-semibold underline decoration-olive decoration-2 underline-offset-4 hover:decoration-forest">
               ${escapeHtml(b.name)}
             </a>
             <a href="${escapeHtml(b.url)}" target="_blank" rel="noopener noreferrer"
-               class="block truncate text-xs text-ocean/60 hover:text-ocean">
+               class="block truncate text-xs text-muted hover:text-forest">
               ${escapeHtml(b.url)}
             </a>
           </div>
           <div class="flex shrink-0">
             <button type="button" class="btn-icon" data-action="edit" data-id="${b.id}" aria-label="Ubah ${escapeHtml(b.name)}">
-              <i class="ti ti-pencil"></i>
+              <i aria-hidden="true" class="ti ti-pencil"></i>
             </button>
-            <button type="button" class="btn-icon hover:!text-rose-600" data-action="delete" data-id="${b.id}" aria-label="Hapus ${escapeHtml(b.name)}">
-              <i class="ti ti-trash"></i>
+            <button type="button" class="btn-icon hover:!text-rose-700" data-action="delete" data-id="${b.id}" aria-label="Hapus ${escapeHtml(b.name)}">
+              <i aria-hidden="true" class="ti ti-trash"></i>
             </button>
           </div>
         </div>
         <div class="mt-3">
-          <span class="badge bg-matcha text-ocean"><i class="ti ti-tag"></i>${escapeHtml(b.category)}</span>
+          <span class="badge bg-lime text-forest"><i aria-hidden="true" class="ti ti-tag"></i>${escapeHtml(b.category)}</span>
         </div>
-        ${b.note ? `<p class="mt-2 text-sm text-ocean/80">${escapeHtml(b.note)}</p>` : ""}
+        ${b.note ? `<p class="mt-2 text-sm text-muted">${escapeHtml(b.note)}</p>` : ""}
       </li>`
     )
     .join("");
@@ -721,8 +737,8 @@ function handleAnswer(chosenIndex) {
 
   const isLast = quiz.index === QUESTIONS.length - 1;
   $("#quiz-next-btn").innerHTML = isLast
-    ? `Lihat hasil<i class="ti ti-flag"></i>`
-    : `Soal berikutnya<i class="ti ti-arrow-right"></i>`;
+    ? `Lihat hasil<i aria-hidden="true" class="ti ti-flag"></i>`
+    : `Soal berikutnya<i aria-hidden="true" class="ti ti-arrow-right"></i>`;
   $("#quiz-next-btn").classList.remove("hidden");
 }
 
@@ -791,7 +807,7 @@ function init() {
   showQuizView("start");
 
   // Pulihkan tab terakhir yang dibuka
-  setActiveTab(loadData(STORAGE_KEYS.activeTab, TAB_NAMES[0]));
+  setActiveTab(getInitialTab());
 }
 
 init();

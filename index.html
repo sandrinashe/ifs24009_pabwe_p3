@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WealthGuide, Intertwined, dan QuickQuiz</title>
+  <title>WealthGuide, IntertwinedMind, dan QuickQuiz</title>
+  <meta name="description" content="Tiga aplikasi web kecil dalam satu halaman: WealthGuide untuk mencatat keuangan, IntertwinedMind untuk menyimpan tautan, dan QuickQuiz untuk kuis dasar web." />
+  <meta name="theme-color" content="#3A3F2B" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%236B8E23' d='M12 0c.6 6.4 5 11.4 12 12-7 .6-11.4 5.6-12 12-.6-6.4-5-11.4-12-12C7 11.4 11.4 6.4 12 0z'/%3E%3C/svg%3E" />
 
   <!-- Google Fonts: Fraunces (judul) + DM Sans (isi) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,18 +16,19 @@
   <!-- Tabler Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
 
-  <!-- Tailwind CSS (CDN) + konfigurasi palet Blue Matcha -->
+  <!-- Tailwind CSS (CDN) + konfigurasi palet hijau zaitun -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            ocean: "#31465A",   // deep ocean
-            matcha: "#C7DFA3",  // matcha green
-            milk: "#FFFDF7",    // vanilla milk
-            sky: "#89B9E6",     // airy blue
-            aqua: "#D9F0FF",    // frozen aqua
+            forest: "#3A3F2B", // hijau hutan (teks, tombol utama, header)
+            olive: "#6B8E23",  // hijau zaitun (border, aksen, progress)
+            lime: "#A3C957",   // hijau lime (badge, tombol sekunder)
+            pale: "#DDECC8",   // hijau pucat (hover, latar kecil)
+            cream: "#F9FAF6",  // krem (latar halaman)
+            muted: "#555B41",  // teks sekunder (kontras aman di atas krem/putih)
           },
           fontFamily: {
             display: ["Fraunces", "Georgia", "serif"],
@@ -39,43 +43,43 @@
   <style type="text/tailwindcss">
     @layer components {
       .card {
-        @apply rounded-2xl border border-sky/30 bg-white/80 shadow-sm;
+        @apply rounded-2xl border border-olive/30 bg-white/80 shadow-sm;
       }
       .label {
-        @apply mb-1 block text-xs font-semibold text-ocean/70;
+        @apply mb-1 block text-xs font-semibold text-muted;
       }
       .field {
-        @apply w-full rounded-xl border border-sky/50 bg-milk px-3 py-2 text-sm text-ocean placeholder:text-ocean/40 focus:border-sky focus:outline-none focus:ring-2 focus:ring-sky;
+        @apply w-full rounded-xl border border-olive/50 bg-cream px-3 py-2 text-sm text-forest placeholder:text-muted focus:border-olive focus:outline-none focus:ring-2 focus:ring-olive;
       }
       .btn-primary {
-        @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-ocean px-4 py-2 text-sm font-semibold text-milk transition hover:bg-ocean/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2;
+        @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-forest px-4 py-2 text-sm font-semibold text-cream transition hover:bg-forest/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-olive focus-visible:ring-offset-2;
       }
-      .btn-matcha {
-        @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-matcha px-4 py-2 text-sm font-semibold text-ocean transition hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2;
+      .btn-lime {
+        @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-lime px-4 py-2 text-sm font-semibold text-forest transition hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2;
       }
       .btn-ghost {
-        @apply inline-flex items-center justify-center gap-1.5 rounded-xl border border-sky/60 px-4 py-2 text-sm font-semibold text-ocean transition hover:bg-aqua focus:outline-none focus-visible:ring-2 focus-visible:ring-sky;
+        @apply inline-flex items-center justify-center gap-1.5 rounded-xl border border-olive/60 px-4 py-2 text-sm font-semibold text-forest transition hover:bg-pale focus:outline-none focus-visible:ring-2 focus-visible:ring-olive;
       }
       .btn-danger {
-        @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2;
+        @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-rose-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2;
       }
       .btn-icon {
-        @apply inline-flex h-9 w-9 items-center justify-center rounded-lg text-ocean/70 transition hover:bg-aqua hover:text-ocean focus:outline-none focus-visible:ring-2 focus-visible:ring-sky;
+        @apply inline-flex h-9 w-9 items-center justify-center rounded-lg text-muted transition hover:bg-pale hover:text-forest focus:outline-none focus-visible:ring-2 focus-visible:ring-olive;
       }
       .badge {
         @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
       }
       .tab-btn {
-        @apply inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-ocean/70 transition hover:bg-aqua focus:outline-none focus-visible:ring-2 focus-visible:ring-sky sm:flex-none;
+        @apply inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-muted transition hover:bg-pale focus:outline-none focus-visible:ring-2 focus-visible:ring-olive sm:flex-none;
       }
       .tab-btn[aria-selected="true"] {
-        @apply bg-ocean text-milk shadow;
+        @apply bg-forest text-cream shadow;
       }
       .option-btn {
-        @apply w-full rounded-xl border border-sky/50 bg-milk px-4 py-3 text-left text-sm font-medium text-ocean transition hover:bg-aqua focus:outline-none focus-visible:ring-2 focus-visible:ring-sky disabled:cursor-default;
+        @apply w-full rounded-xl border border-olive/50 bg-cream px-4 py-3 text-left text-sm font-medium text-forest transition hover:bg-pale focus:outline-none focus-visible:ring-2 focus-visible:ring-olive disabled:cursor-default;
       }
       .option-btn.is-correct {
-        @apply border-matcha bg-matcha/60 text-ocean;
+        @apply border-lime bg-lime/60 text-forest;
       }
       .option-btn.is-wrong {
         @apply border-rose-300 bg-rose-100 text-rose-800;
@@ -84,17 +88,17 @@
   </style>
 </head>
 
-<body class="min-h-screen bg-milk font-sans text-ocean antialiased">
+<body class="min-h-screen bg-cream font-sans text-forest antialiased">
   <!-- ============ HEADER ============ -->
-  <header class="bg-ocean text-milk">
+  <header class="bg-forest text-cream">
     <div class="mx-auto flex max-w-5xl items-center gap-4 px-4 py-8 sm:py-10">
       <!-- Motif bintang empat sudut dari palet -->
-      <svg class="h-10 w-10 shrink-0 text-matcha" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg class="h-10 w-10 shrink-0 text-lime" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M12 0c.6 6.4 5 11.4 12 12-7 .6-11.4 5.6-12 12-.6-6.4-5-11.4-12-12C7 11.4 11.4 6.4 12 0z" />
       </svg>
       <div>
         <h1 class="font-display text-3xl font-bold leading-tight sm:text-4xl">Tiga alat kecil untuk harimu</h1>
-        <p class="mt-1 max-w-xl text-sm text-aqua/90">
+        <p class="mt-1 max-w-xl text-sm text-pale/90">
           Catat uang, simpan tautan, lalu uji pengetahuanmu. Semua data tersimpan di browser ini.
         </p>
       </div>
@@ -102,16 +106,16 @@
   </header>
 
   <!-- ============ NAVIGASI TAB ============ -->
-  <nav class="sticky top-0 z-30 border-b border-sky/30 bg-milk/95 backdrop-blur" aria-label="Navigasi utama">
+  <nav class="sticky top-0 z-30 border-b border-olive/30 bg-cream/95 backdrop-blur" aria-label="Navigasi utama">
     <div role="tablist" class="mx-auto flex max-w-5xl gap-1 px-4 py-2">
       <button type="button" role="tab" id="tab-wealth" class="tab-btn" data-tab="wealth" aria-controls="panel-wealth" aria-selected="true">
-        <i class="ti ti-wallet text-lg"></i><span>WealthGuide</span>
+        <i aria-hidden="true" class="ti ti-wallet text-lg"></i><span>WealthGuide</span>
       </button>
       <button type="button" role="tab" id="tab-link" class="tab-btn" data-tab="link" aria-controls="panel-link" aria-selected="false">
-        <i class="ti ti-link text-lg"></i><span>IntertwinedMind</span>
+        <i aria-hidden="true" class="ti ti-link text-lg"></i><span>IntertwinedMind</span>
       </button>
       <button type="button" role="tab" id="tab-quiz" class="tab-btn" data-tab="quiz" aria-controls="panel-quiz" aria-selected="false">
-        <i class="ti ti-bulb text-lg"></i><span>QuickQuiz</span>
+        <i aria-hidden="true" class="ti ti-bulb text-lg"></i><span>QuickQuiz</span>
       </button>
     </div>
   </nav>
@@ -123,21 +127,21 @@
     <section id="panel-wealth" role="tabpanel" aria-labelledby="tab-wealth" class="space-y-6">
       <div>
         <h2 class="font-display text-2xl font-bold">WealthGuide</h2>
-        <p class="text-sm text-ocean/70">Catat pemasukan dan pengeluaran harianmu, lihat saldonya sekilas.</p>
+        <p class="text-sm text-muted">Catat pemasukan dan pengeluaran harianmu, lihat saldonya sekilas.</p>
       </div>
 
       <!-- Ringkasan -->
       <div class="grid gap-3 sm:grid-cols-3">
         <div class="card p-4">
-          <p class="flex items-center gap-1.5 text-sm text-ocean/70"><i class="ti ti-arrow-down-left"></i>Total pemasukan</p>
+          <p class="flex items-center gap-1.5 text-sm text-muted"><i aria-hidden="true" class="ti ti-arrow-down-left"></i>Total pemasukan</p>
           <p id="sum-income" class="mt-1 font-display text-2xl font-bold">Rp0</p>
         </div>
         <div class="card p-4">
-          <p class="flex items-center gap-1.5 text-sm text-ocean/70"><i class="ti ti-arrow-up-right"></i>Total pengeluaran</p>
+          <p class="flex items-center gap-1.5 text-sm text-muted"><i aria-hidden="true" class="ti ti-arrow-up-right"></i>Total pengeluaran</p>
           <p id="sum-expense" class="mt-1 font-display text-2xl font-bold">Rp0</p>
         </div>
-        <div class="rounded-2xl bg-ocean p-4 text-milk shadow-sm">
-          <p class="flex items-center gap-1.5 text-sm text-aqua/80"><i class="ti ti-scale"></i>Saldo</p>
+        <div class="rounded-2xl bg-forest p-4 text-cream shadow-sm">
+          <p class="flex items-center gap-1.5 text-sm text-pale/80"><i aria-hidden="true" class="ti ti-scale"></i>Saldo</p>
           <p id="sum-balance" class="mt-1 font-display text-2xl font-bold">Rp0</p>
         </div>
       </div>
@@ -170,16 +174,16 @@
             <input id="expense-date" name="date" type="date" class="field" />
           </div>
         </div>
-        <p id="expense-error" class="mt-3 hidden text-sm font-medium text-rose-600" role="alert"></p>
+        <p id="expense-error" class="mt-3 hidden text-sm font-medium text-rose-700" role="alert"></p>
         <div class="mt-4">
-          <button type="submit" class="btn-primary"><i class="ti ti-plus"></i>Simpan transaksi</button>
+          <button type="submit" class="btn-primary"><i aria-hidden="true" class="ti ti-plus"></i>Simpan transaksi</button>
         </div>
       </form>
 
       <!-- Cari, filter, sort -->
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <div class="relative">
-          <i class="ti ti-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ocean/50"></i>
+          <i aria-hidden="true" class="ti ti-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"></i>
           <input id="expense-search" type="search" class="field pl-9" placeholder="Cari judul transaksi" aria-label="Cari judul transaksi" />
         </div>
         <select id="expense-filter-type" class="field" aria-label="Filter tipe">
@@ -198,23 +202,23 @@
 
       <!-- Daftar transaksi -->
       <div>
-        <p id="expense-count" class="mb-2 text-sm text-ocean/70"></p>
+        <p id="expense-count" class="mb-2 text-sm text-muted"></p>
         <ul id="expense-list" class="space-y-2"></ul>
         <div id="expense-empty" class="card hidden px-6 py-10 text-center">
-          <i class="ti ti-wallet-off text-4xl text-sky"></i>
+          <i aria-hidden="true" class="ti ti-wallet-off text-4xl text-olive"></i>
           <p id="expense-empty-title" class="mt-2 font-semibold"></p>
-          <p id="expense-empty-text" class="text-sm text-ocean/70"></p>
+          <p id="expense-empty-text" class="text-sm text-muted"></p>
         </div>
       </div>
     </section>
 
     <!-- ============================================================
-         PANEL 2: INTERTWINED (Bookmark / Link Manager)
+         PANEL 2: INTERTWINEDMIND (Bookmark / Link Manager)
          ============================================================ -->
     <section id="panel-link" role="tabpanel" aria-labelledby="tab-link" class="hidden space-y-6">
       <div>
         <h2 class="font-display text-2xl font-bold">IntertwinedMind</h2>
-        <p class="text-sm text-ocean/70">Kumpulkan tautan favoritmu di satu tempat yang rapi.</p>
+        <p class="text-sm text-muted">Kumpulkan tautan favoritmu di satu tempat yang rapi.</p>
       </div>
 
       <form id="bookmark-form" class="card p-5" novalidate>
@@ -243,15 +247,15 @@
             <input id="bookmark-note" name="note" type="text" class="field" placeholder="Kenapa tautan ini penting?" />
           </div>
         </div>
-        <p id="bookmark-error" class="mt-3 hidden text-sm font-medium text-rose-600" role="alert"></p>
+        <p id="bookmark-error" class="mt-3 hidden text-sm font-medium text-rose-700" role="alert"></p>
         <div class="mt-4">
-          <button type="submit" class="btn-primary"><i class="ti ti-bookmark-plus"></i>Simpan tautan</button>
+          <button type="submit" class="btn-primary"><i aria-hidden="true" class="ti ti-bookmark-plus"></i>Simpan tautan</button>
         </div>
       </form>
 
       <div class="grid gap-3 sm:grid-cols-2">
         <div class="relative">
-          <i class="ti ti-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ocean/50"></i>
+          <i aria-hidden="true" class="ti ti-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"></i>
           <input id="bookmark-search" type="search" class="field pl-9" placeholder="Cari nama, URL, atau kategori" aria-label="Cari tautan" />
         </div>
         <select id="bookmark-sort" class="field" aria-label="Urutkan tautan">
@@ -262,12 +266,12 @@
       </div>
 
       <div>
-        <p id="bookmark-count" class="mb-2 text-sm text-ocean/70"></p>
+        <p id="bookmark-count" class="mb-2 text-sm text-muted"></p>
         <ul id="bookmark-list" class="grid gap-3 sm:grid-cols-2"></ul>
         <div id="bookmark-empty" class="card hidden px-6 py-10 text-center">
-          <i class="ti ti-link-off text-4xl text-sky"></i>
+          <i aria-hidden="true" class="ti ti-link-off text-4xl text-olive"></i>
           <p id="bookmark-empty-title" class="mt-2 font-semibold"></p>
-          <p id="bookmark-empty-text" class="text-sm text-ocean/70"></p>
+          <p id="bookmark-empty-text" class="text-sm text-muted"></p>
         </div>
       </div>
     </section>
@@ -278,22 +282,22 @@
     <section id="panel-quiz" role="tabpanel" aria-labelledby="tab-quiz" class="hidden space-y-6">
       <div>
         <h2 class="font-display text-2xl font-bold">QuickQuiz</h2>
-        <p class="text-sm text-ocean/70">Uji dasar HTML, CSS, dan JavaScript lewat kuis pilihan ganda.</p>
+        <p class="text-sm text-muted">Uji dasar HTML, CSS, dan JavaScript lewat kuis pilihan ganda.</p>
       </div>
 
       <div class="card mx-auto max-w-2xl p-6 sm:p-8">
         <!-- Layar awal -->
         <div id="quiz-start" class="text-center">
-          <svg class="mx-auto h-12 w-12 text-sky" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <svg class="mx-auto h-12 w-12 text-olive" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12 0c.6 6.4 5 11.4 12 12-7 .6-11.4 5.6-12 12-.6-6.4-5-11.4-12-12C7 11.4 11.4 6.4 12 0z" />
           </svg>
           <h3 class="mt-3 font-display text-xl font-bold">Siap menjawab?</h3>
-          <p id="quiz-intro" class="mt-1 text-sm text-ocean/70"></p>
-          <p class="mt-4 inline-flex items-center gap-2 rounded-full bg-aqua px-4 py-1.5 text-sm font-semibold">
-            <i class="ti ti-trophy"></i>Skor terbaik: <span id="quiz-highscore-start">Belum ada</span>
+          <p id="quiz-intro" class="mt-1 text-sm text-muted"></p>
+          <p class="mt-4 inline-flex items-center gap-2 rounded-full bg-pale px-4 py-1.5 text-sm font-semibold">
+            <i aria-hidden="true" class="ti ti-trophy"></i>Skor terbaik: <span id="quiz-highscore-start">Belum ada</span>
           </p>
           <div class="mt-6">
-            <button type="button" id="quiz-start-btn" class="btn-primary"><i class="ti ti-player-play"></i>Mulai kuis</button>
+            <button type="button" id="quiz-start-btn" class="btn-primary"><i aria-hidden="true" class="ti ti-player-play"></i>Mulai kuis</button>
           </div>
         </div>
 
@@ -301,42 +305,42 @@
         <div id="quiz-play" class="hidden">
           <div class="mb-1 flex items-center justify-between text-sm font-semibold">
             <span id="quiz-progress-text">Soal 1 dari 5</span>
-            <span id="quiz-score-live" class="text-ocean/70">Skor 0</span>
+            <span id="quiz-score-live" class="text-muted">Skor 0</span>
           </div>
-          <div class="h-2 overflow-hidden rounded-full bg-aqua">
-            <div id="quiz-progress-bar" class="h-full rounded-full bg-sky transition-all duration-300" style="width: 0%"></div>
+          <div class="h-2 overflow-hidden rounded-full bg-pale">
+            <div id="quiz-progress-bar" class="h-full rounded-full bg-olive transition-all duration-300" style="width: 0%"></div>
           </div>
 
           <h3 id="quiz-question" class="mt-6 font-display text-xl font-bold leading-snug"></h3>
           <div id="quiz-options" class="mt-4 space-y-2"></div>
 
-          <p id="quiz-feedback" class="mt-4 hidden rounded-xl bg-aqua px-4 py-3 text-sm" role="status"></p>
+          <p id="quiz-feedback" class="mt-4 hidden rounded-xl bg-pale px-4 py-3 text-sm" role="status"></p>
           <div class="mt-5 flex justify-end">
-            <button type="button" id="quiz-next-btn" class="btn-primary hidden">Soal berikutnya<i class="ti ti-arrow-right"></i></button>
+            <button type="button" id="quiz-next-btn" class="btn-primary hidden">Soal berikutnya<i aria-hidden="true" class="ti ti-arrow-right"></i></button>
           </div>
         </div>
 
         <!-- Layar hasil -->
         <div id="quiz-result" class="hidden text-center">
-          <p class="text-sm text-ocean/70">Skor akhirmu</p>
+          <p class="text-sm text-muted">Skor akhirmu</p>
           <p id="quiz-final-score" class="font-display text-5xl font-bold">0 / 0</p>
           <p id="quiz-result-message" class="mt-2 text-sm"></p>
           <p id="quiz-new-record" class="mt-3 hidden">
-            <span class="badge bg-matcha text-ocean"><i class="ti ti-confetti"></i>Rekor baru!</span>
+            <span class="badge bg-lime text-forest"><i aria-hidden="true" class="ti ti-confetti"></i>Rekor baru!</span>
           </p>
-          <p class="mt-4 inline-flex items-center gap-2 rounded-full bg-aqua px-4 py-1.5 text-sm font-semibold">
-            <i class="ti ti-trophy"></i>Skor terbaik: <span id="quiz-highscore-result">Belum ada</span>
+          <p class="mt-4 inline-flex items-center gap-2 rounded-full bg-pale px-4 py-1.5 text-sm font-semibold">
+            <i aria-hidden="true" class="ti ti-trophy"></i>Skor terbaik: <span id="quiz-highscore-result">Belum ada</span>
           </p>
           <div class="mt-6 flex flex-wrap justify-center gap-2">
-            <button type="button" id="quiz-restart-btn" class="btn-primary"><i class="ti ti-refresh"></i>Main lagi</button>
-            <button type="button" id="quiz-reset-highscore-btn" class="btn-ghost"><i class="ti ti-eraser"></i>Reset skor terbaik</button>
+            <button type="button" id="quiz-restart-btn" class="btn-primary"><i aria-hidden="true" class="ti ti-refresh"></i>Main lagi</button>
+            <button type="button" id="quiz-reset-highscore-btn" class="btn-ghost"><i aria-hidden="true" class="ti ti-eraser"></i>Reset skor terbaik</button>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="border-t border-sky/30 py-6 text-center text-sm text-ocean/60">
+  <footer class="border-t border-olive/30 py-6 text-center text-sm text-muted">
     Data tersimpan di browser (localStorage). Tab terakhir yang kamu buka akan diingat.
   </footer>
 
@@ -345,8 +349,8 @@
        ============================================================ -->
 
   <!-- Modal ubah transaksi -->
-  <div id="modal-expense-edit" class="fixed inset-0 z-50 hidden items-center justify-center bg-ocean/50 p-4" role="dialog" aria-modal="true" aria-labelledby="expense-edit-title">
-    <div class="max-h-full w-full max-w-lg overflow-y-auto rounded-2xl bg-milk p-6 shadow-xl">
+  <div id="modal-expense-edit" class="fixed inset-0 z-50 hidden items-center justify-center bg-forest/50 p-4" role="dialog" aria-modal="true" aria-labelledby="expense-edit-title">
+    <div class="max-h-full w-full max-w-lg overflow-y-auto rounded-2xl bg-cream p-6 shadow-xl">
       <h3 id="expense-edit-title" class="mb-4 font-display text-xl font-bold">Ubah transaksi</h3>
       <form id="expense-edit-form" novalidate>
         <input type="hidden" name="id" />
@@ -375,18 +379,18 @@
             <input id="edit-expense-date" name="date" type="date" class="field" />
           </div>
         </div>
-        <p id="expense-edit-error" class="mt-3 hidden text-sm font-medium text-rose-600" role="alert"></p>
+        <p id="expense-edit-error" class="mt-3 hidden text-sm font-medium text-rose-700" role="alert"></p>
         <div class="mt-5 flex justify-end gap-2">
           <button type="button" data-close-modal="expense-edit" class="btn-ghost">Batal</button>
-          <button type="submit" class="btn-primary"><i class="ti ti-device-floppy"></i>Simpan perubahan</button>
+          <button type="submit" class="btn-primary"><i aria-hidden="true" class="ti ti-device-floppy"></i>Simpan perubahan</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Modal ubah bookmark -->
-  <div id="modal-bookmark-edit" class="fixed inset-0 z-50 hidden items-center justify-center bg-ocean/50 p-4" role="dialog" aria-modal="true" aria-labelledby="bookmark-edit-title">
-    <div class="max-h-full w-full max-w-lg overflow-y-auto rounded-2xl bg-milk p-6 shadow-xl">
+  <div id="modal-bookmark-edit" class="fixed inset-0 z-50 hidden items-center justify-center bg-forest/50 p-4" role="dialog" aria-modal="true" aria-labelledby="bookmark-edit-title">
+    <div class="max-h-full w-full max-w-lg overflow-y-auto rounded-2xl bg-cream p-6 shadow-xl">
       <h3 id="bookmark-edit-title" class="mb-4 font-display text-xl font-bold">Ubah tautan</h3>
       <form id="bookmark-edit-form" novalidate>
         <input type="hidden" name="id" />
@@ -408,25 +412,25 @@
             <input id="edit-bookmark-note" name="note" type="text" class="field" />
           </div>
         </div>
-        <p id="bookmark-edit-error" class="mt-3 hidden text-sm font-medium text-rose-600" role="alert"></p>
+        <p id="bookmark-edit-error" class="mt-3 hidden text-sm font-medium text-rose-700" role="alert"></p>
         <div class="mt-5 flex justify-end gap-2">
           <button type="button" data-close-modal="bookmark-edit" class="btn-ghost">Batal</button>
-          <button type="submit" class="btn-primary"><i class="ti ti-device-floppy"></i>Simpan perubahan</button>
+          <button type="submit" class="btn-primary"><i aria-hidden="true" class="ti ti-device-floppy"></i>Simpan perubahan</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Modal konfirmasi hapus (dipakai bersama oleh WealthGuide dan Intertwined) -->
-  <div id="modal-delete" class="fixed inset-0 z-50 hidden items-center justify-center bg-ocean/50 p-4" role="dialog" aria-modal="true" aria-labelledby="delete-title">
-    <div class="w-full max-w-sm rounded-2xl bg-milk p-6 shadow-xl">
+  <!-- Modal konfirmasi hapus (dipakai bersama oleh WealthGuide dan IntertwinedMind) -->
+  <div id="modal-delete" class="fixed inset-0 z-50 hidden items-center justify-center bg-forest/50 p-4" role="dialog" aria-modal="true" aria-labelledby="delete-title">
+    <div class="w-full max-w-sm rounded-2xl bg-cream p-6 shadow-xl">
       <h3 id="delete-title" class="mb-2 font-display text-xl font-bold">Hapus data?</h3>
-      <p class="mb-5 text-sm text-ocean/80">
+      <p class="mb-5 text-sm text-muted">
         Yakin ingin menghapus <strong id="delete-item-title"></strong>? Tindakan ini tidak dapat dibatalkan.
       </p>
       <div class="flex justify-end gap-2">
         <button type="button" data-close-modal="delete" class="btn-ghost">Batal</button>
-        <button type="button" id="delete-confirm" class="btn-danger"><i class="ti ti-trash"></i>Hapus</button>
+        <button type="button" id="delete-confirm" class="btn-danger"><i aria-hidden="true" class="ti ti-trash"></i>Hapus</button>
       </div>
     </div>
   </div>
