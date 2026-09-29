@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WealthGuide, IntertwinedMind, dan QuickQuiz</title>
-  <meta name="description" content="Tiga aplikasi web kecil dalam satu halaman: WealthGuide untuk mencatat keuangan, IntertwinedMind untuk menyimpan tautan, dan QuickQuiz untuk kuis dasar web." />
+  <meta name="description" content="Tiga aplikasi web kecil dalam satu halaman: WealthGuide untuk mencatat keuangan, IntertwinedMindMind untuk menyimpan tautan, dan QuickQuiz untuk kuis dasar web." />
   <meta name="theme-color" content="#3A3F2B" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%236B8E23' d='M12 0c.6 6.4 5 11.4 12 12-7 .6-11.4 5.6-12 12-.6-6.4-5-11.4-12-12C7 11.4 11.4 6.4 12 0z'/%3E%3C/svg%3E" />
 
@@ -108,11 +108,11 @@
   <!-- ============ NAVIGASI TAB ============ -->
   <nav class="sticky top-0 z-30 border-b border-olive/30 bg-cream/95 backdrop-blur" aria-label="Navigasi utama">
     <div role="tablist" class="mx-auto flex max-w-5xl gap-1 px-4 py-2">
-      <button type="button" role="tab" id="tab-wealth" class="tab-btn" data-tab="wealth" aria-controls="panel-wealth" aria-selected="true">
+      <button type="button" role="tab" id="tab-expense" class="tab-btn" data-tab="expense" aria-controls="panel-expense" aria-selected="true">
         <i aria-hidden="true" class="ti ti-wallet text-lg"></i><span>WealthGuide</span>
       </button>
-      <button type="button" role="tab" id="tab-link" class="tab-btn" data-tab="link" aria-controls="panel-link" aria-selected="false">
-        <i aria-hidden="true" class="ti ti-link text-lg"></i><span>IntertwinedMind</span>
+      <button type="button" role="tab" id="tab-bookmark" class="tab-btn" data-tab="bookmark" aria-controls="panel-bookmark" aria-selected="false">
+        <i aria-hidden="true" class="ti ti-link text-lg"></i><span>IntertwinedMindMind</span>
       </button>
       <button type="button" role="tab" id="tab-quiz" class="tab-btn" data-tab="quiz" aria-controls="panel-quiz" aria-selected="false">
         <i aria-hidden="true" class="ti ti-bulb text-lg"></i><span>QuickQuiz</span>
@@ -124,7 +124,7 @@
     <!-- ============================================================
          PANEL 1: WEALTHGUIDE (Catatan Pengeluaran Harian)
          ============================================================ -->
-    <section id="panel-wealth" role="tabpanel" aria-labelledby="tab-wealth" class="space-y-6">
+    <section id="panel-expense" role="tabpanel" aria-labelledby="tab-expense" class="space-y-6">
       <div>
         <h2 class="font-display text-2xl font-bold">WealthGuide</h2>
         <p class="text-sm text-muted">Catat pemasukan dan pengeluaran harianmu, lihat saldonya sekilas.</p>
@@ -213,11 +213,11 @@
     </section>
 
     <!-- ============================================================
-         PANEL 2: INTERTWINEDMIND (Bookmark / Link Manager)
+         PANEL 2: IntertwinedMindMind (Bookmark / Link Manager)
          ============================================================ -->
-    <section id="panel-link" role="tabpanel" aria-labelledby="tab-link" class="hidden space-y-6">
+    <section id="panel-bookmark" role="tabpanel" aria-labelledby="tab-bookmark" class="hidden space-y-6">
       <div>
-        <h2 class="font-display text-2xl font-bold">IntertwinedMind</h2>
+        <h2 class="font-display text-2xl font-bold">IntertwinedMindMind</h2>
         <p class="text-sm text-muted">Kumpulkan tautan favoritmu di satu tempat yang rapi.</p>
       </div>
 
@@ -341,7 +341,7 @@
   </main>
 
   <footer class="border-t border-olive/30 py-6 text-center text-sm text-muted">
-    Data tersimpan di browser (localStorage). Tab terakhir yang kamu buka akan diingat.
+    Data transaksi, tautan, dan skor terbaik tersimpan di browser (localStorage). Tab aktif ditentukan lewat alamat URL (?tab=...).
   </footer>
 
   <!-- ============================================================

@@ -1,13 +1,13 @@
 "use strict";
 
 /* ==========================================================================
-   PABWE P3: WealthGuide + Intertwined + QuickQuiz
+   PABWE P3: WealthGuide + IntertwinedMindMind + QuickQuiz
    Struktur file:
    1. Utilitas umum
    2. Modal
    3. Tab
    4. WealthGuide (Expense Tracker)
-   5. Intertwined (Bookmark Manager)
+   5. IntertwinedMindMind (Bookmark Manager)
    6. QuickQuiz
    7. Inisialisasi
    ========================================================================== */
@@ -20,12 +20,13 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-// Setiap fitur punya key localStorage sendiri supaya data tidak saling menimpa
+// Setiap fitur punya key localStorage sendiri supaya data tidak saling menimpa.
+// Catatan: tab aktif SENGAJA tidak disimpan di sini. Tab aktif murni ditentukan
+// oleh query string URL (?tab=...), bukan localStorage.
 const STORAGE_KEYS = {
   transactions: "wealthguide:transactions",
-  bookmarks: "intertwinedmind:bookmarks",
+  bookmarks: "IntertwinedMindMind:bookmarks",
   highScore: "quickquiz:highscore",
-  activeTab: "app:activeTab",
 };
 
 // Baca data dari localStorage (aman kalau data rusak / kosong)
@@ -135,13 +136,18 @@ document.addEventListener("keydown", (event) => {
 });
 
 /* ==========================================================================
-   3. TAB (hanya satu panel aktif; tab terakhir diingat)
+   3. TAB (hanya satu panel aktif; tab aktif ditentukan murni oleh URL)
    ========================================================================== */
 
-const TAB_NAMES = ["wealth", "link", "quiz"];
+// Nama tab HARUS sama persis dengan spesifikasi: ?tab=expense|bookmark|quiz
+const TAB_NAMES = ["expense", "bookmark", "quiz"];
+const DEFAULT_TAB = TAB_NAMES[0];
 
-function setActiveTab(name) {
-  if (!TAB_NAMES.includes(name)) name = TAB_NAMES[0];
+// Pindah tab + tampilkan panelnya.
+// writeUrl=false dipakai saat menyinkronkan tampilan dari event popstate,
+// karena saat itu URL sudah berubah duluan oleh browser (tidak perlu ditulis lagi).
+function setActiveTab(name, writeUrl = true) {
+  if (!TAB_NAMES.includes(name)) name = DEFAULT_TAB;
 
   $$(".tab-btn").forEach((button) => {
     const isActive = button.dataset.tab === name;
@@ -152,27 +158,35 @@ function setActiveTab(name) {
     $(`#panel-${tabName}`).classList.toggle("hidden", tabName !== name);
   });
 
-  saveData(STORAGE_KEYS.activeTab, name);
-
-  // Cerminkan tab aktif ke URL (?tab=...) supaya tiap tab punya alamat sendiri
-  try {
-    const url = new URL(window.location.href);
-    url.searchParams.set("tab", name);
-    history.replaceState(null, "", url);
-  } catch (error) {
-    // Beberapa browser membatasi replaceState pada file:// - aman diabaikan
+  // PENTING: tab aktif HANYA disimpan di URL (?tab=...), TIDAK PERNAH ke
+  // localStorage, sesuai ketentuan bahwa navigasi tab murni lewat query string.
+  if (writeUrl) {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", name);
+      history.pushState({ tab: name }, "", url);
+    } catch (error) {
+      // Beberapa browser membatasi pushState pada file:// - aman diabaikan
+    }
   }
 }
 
-// Tab awal: prioritaskan ?tab= di URL, lalu tab terakhir dari localStorage
+// Tab awal dibaca murni dari query string URL (?tab=...).
+// Jika parameternya tidak ada atau tidak valid, jatuh ke tab default.
+// TIDAK ADA fallback ke localStorage di sini.
 function getInitialTab() {
   const fromUrl = new URLSearchParams(window.location.search).get("tab");
-  if (TAB_NAMES.includes(fromUrl)) return fromUrl;
-  return loadData(STORAGE_KEYS.activeTab, TAB_NAMES[0]);
+  return TAB_NAMES.includes(fromUrl) ? fromUrl : DEFAULT_TAB;
 }
 
 $$(".tab-btn").forEach((button) => {
   button.addEventListener("click", () => setActiveTab(button.dataset.tab));
+});
+
+// Sinkronkan tampilan saat user menekan tombol back/forward browser,
+// supaya riwayat navigasi antar tab tetap konsisten dengan URL.
+window.addEventListener("popstate", () => {
+  setActiveTab(getInitialTab(), false);
 });
 
 /* ==========================================================================
@@ -412,7 +426,7 @@ expenseEditForm.addEventListener("submit", (event) => {
 );
 
 /* ==========================================================================
-   5. INTERTWINED (BOOKMARK / LINK MANAGER)
+   5. IntertwinedMindMind (BOOKMARK / LINK MANAGER)
    ========================================================================== */
 
 // State: array bookmark { id, name, url, category, note, createdAt }
@@ -581,7 +595,7 @@ $("#bookmark-search").addEventListener("input", renderBookmarks);
 $("#bookmark-sort").addEventListener("change", renderBookmarks);
 
 /* ==========================================================================
-   DELETE (dipakai bersama oleh WealthGuide dan Intertwined)
+   DELETE (dipakai bersama oleh WealthGuide dan IntertwinedMindMind)
    ========================================================================== */
 
 $("#delete-confirm").addEventListener("click", () => {
@@ -798,7 +812,7 @@ function init() {
   $("#expense-date").value = todayISO();
   renderExpenses();
 
-  // Intertwined
+  // IntertwinedMind
   renderBookmarks();
 
   // QuickQuiz
@@ -806,8 +820,10 @@ function init() {
   renderHighScore();
   showQuizView("start");
 
-  // Pulihkan tab terakhir yang dibuka
-  setActiveTab(getInitialTab());
+  // Tentukan tab aktif dari query string URL (?tab=...), bukan localStorage.
+  // writeUrl=false: saat pertama kali dibuka, tidak perlu menambah entri
+  // history baru.
+  setActiveTab(getInitialTab(), false);
 }
 
 init();
